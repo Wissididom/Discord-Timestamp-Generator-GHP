@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    	<link rel="stylesheet" href="index.css">
+    	<title>Discord-Timestamp-Generator</title>
+    </head>
+    <body>
+        <div class="grid-container">
+        	<label for="date">Dato:</label>
+        	<input type="date" id="date" placeholder="Datum" onchange="fromSelected(true)">
+        	<label for="time">Tid:</label>
+        	<input type="time" id="time" step="1" placeholder="Uhrzeit" onchange="fromSelected(true)">
+           	<label for="style">Stil:</label>
+        	<select id="style" size="7" onchange="fromSelected(false);">
+        		<option id="option1" value="t"></option>
+        		<option id="option2" value="T"></option>
+        		<option id="option3" value="d"></option>
+        		<option id="option4" value="D"></option>
+        		<option id="option5" value="f" selected="selected"></option>
+        		<option id="option6" value="F"></option>
+        		<option id="option7" value="R"></option>
+        	</select>
+        </div>
+        <div class="grid-container">
+        	<label>Unix-Timestamp:</label><span id="unix"></span>
+        	<br>
+        	<label>Discord-Code:</label><span id="code"></span>
+        	<br>
+        	<label>Formatert Discord-Code:</label><span id="styledCode"></span>
+        </div>
+        <script src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
+        <script>
+        	// Initialize input elements with current date and time
+            moment.locale('no');
+        	let now = moment();
+        	now.milliseconds(0);
+        	now = now.add(moment().utcOffset(), "m").toDate();
+        	document.getElementById('date').valueAsDate = now;
+        	document.getElementById('time').valueAsDate = now;
+           	generate(moment());
+           	function fromSelected(gen) {
+        		let date = document.getElementById('date').valueAsDate;
+        		let time = document.getElementById('time').valueAsNumber;
+        		time /= 1000; // convert from milliseconds to seconds
+           		let hours = time / 3600;
+        		let minutes = time % 3600 / 60;
+        		let seconds = time % 60;
+        		let mom = moment([date.getFullYear(), date.getMonth(), date.getDate(),
+        				hours, minutes, seconds]);
+           		if (gen)
+        			generate(mom);
+        		else
+        			updateStyled(mom);
+            }
+        	function generate(mom) {
+        		document.getElementById('unix').innerHTML = mom.unix();
+        		document.getElementById('code').innerHTML = '&lt;t:' + mom.unix() + '&gt;';
+        		document.getElementById('option1').innerHTML = mom.format('HH:mm');
+        		document.getElementById('option2').innerHTML = mom.format('HH:mm:ss');
+        		document.getElementById('option3').innerHTML = mom.format('DD.MM.YYYY');
+        		document.getElementById('option4').innerHTML = mom.format('DD. MMMM YYYY');
+        		document.getElementById('option5').innerHTML = mom.format('DD. MMMM YYYY HH:mm');
+        		document.getElementById('option6').innerHTML = mom.format('dddd, DD. MMMM YYYY HH:mm');
+        		document.getElementById('option7').innerHTML = mom.fromNow();
+                updateStyled(mom);
+        	}
+           	function updateStyled(mom) {
+        		document.getElementById('styledCode').innerHTML = `&lt;t:${mom.unix()}:${document.getElementById('style').value}&gt;`;
+        	}
+        </script>
+    </body>
+</html>
