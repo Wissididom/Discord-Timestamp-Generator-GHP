@@ -29,9 +29,10 @@
         	<br>
         	<label>Formatted Discord-Code:</label><span id="styledCode"></span>
         </div>
-        <script src="https://momentjs.com/downloads/moment.min.js"></script>
+        <script src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
         <script>
         	// Initialize input elements with current date and time
+            moment.locale('en');
         	let now = moment();
         	now.milliseconds(0);
         	now = now.add(moment().utcOffset(), "m").toDate();
