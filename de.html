@@ -56,12 +56,12 @@
         	function generate(mom) {
         		document.getElementById('unix').innerHTML = mom.unix();
         		document.getElementById('code').innerHTML = '&lt;t:' + mom.unix() + '&gt;';
-        		document.getElementById('option1').innerHTML = mom.format('HH:mm');
-        		document.getElementById('option2').innerHTML = mom.format('HH:mm:ss');
-        		document.getElementById('option3').innerHTML = mom.format('DD.MM.YYYY');
-        		document.getElementById('option4').innerHTML = mom.format('DD. MMMM YYYY');
-        		document.getElementById('option5').innerHTML = mom.format('DD. MMMM YYYY HH:mm');
-        		document.getElementById('option6').innerHTML = mom.format('dddd, DD. MMMM YYYY HH:mm');
+        		document.getElementById('option1').innerHTML = mom.format('LT');
+        		document.getElementById('option2').innerHTML = mom.format('LTS');
+        		document.getElementById('option3').innerHTML = mom.format('L');
+        		document.getElementById('option4').innerHTML = mom.format('LL');
+        		document.getElementById('option5').innerHTML = mom.format('LLL');
+        		document.getElementById('option6').innerHTML = mom.format('LLLL');
         		document.getElementById('option7').innerHTML = mom.fromNow();
                 updateStyled(mom);
         	}
