@@ -1,32 +1,35 @@
 @font-face {
-	font-family: Roboto;
-	src: url("Roboto-Regular.ttf");
+  font-family: Roboto;
+  src: url("Roboto-Regular.ttf");
 }
 
 body {
-	margin: 20px;
-	font-family: "Roboto";
+  margin: 20px;
+  font-family: "Roboto";
 }
 
 .grid-container {
-	display: grid;
-	grid-template-columns: max-content 300px;
-	gap: 8px;
+  display: grid;
+  grid-template-columns: max-content 300px;
+  gap: 8px;
 
-	margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 .grid-container label {
-	grid-column: 1;
+  grid-column: 1;
 }
 
 .grid-container input,
 .grid-container select,
-#unix, #code, #styledCode {
-	grid-column: 2;
+#unix,
+#code,
+#styledCode {
+  grid-column: 2;
 }
 
-span, label {
-	font-weight: bold;
-	font-size: large;
+span,
+label {
+  font-weight: bold;
+  font-size: large;
 }

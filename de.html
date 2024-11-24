@@ -1,16 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="index.css" />
     <title>Discord-Timestamp-Generator</title>
   </head>
   <body>
     <div class="grid-container">
       <label for="date">Datum:</label>
-      <input type="date" id="date" placeholder="Datum" onchange="fromSelected(true)">
+      <input
+        type="date"
+        id="date"
+        placeholder="Datum"
+        onchange="fromSelected(true)"
+      />
       <label for="time">Uhrzeit:</label>
-      <input type="time" id="time" step="1" placeholder="Uhrzeit" onchange="fromSelected(true)">
+      <input
+        type="time"
+        id="time"
+        step="1"
+        placeholder="Uhrzeit"
+        onchange="fromSelected(true)"
+      />
       <label for="style">Stil:</label>
       <select id="style" size="7" onchange="fromSelected(false);">
         <option id="option1" value="t"></option>
@@ -25,10 +36,10 @@
     <div class="grid-container">
       <label>Unix-Timestamp:</label>
       <span id="unix"></span>
-      <br>
+      <br />
       <label>Discord-Code:</label>
       <span id="code"></span>
-      <br>
+      <br />
       <label>Formatierter Discord-Code:</label>
       <span id="styledCode"></span>
     </div>
@@ -36,27 +47,27 @@
     <script>
       // Initialize input elements with current date and time
       const { DateTime, Settings } = luxon;
-      Settings.defaultLocale = 'de';
+      Settings.defaultLocale = "de";
       let now = DateTime.local().set({ millisecond: 0 });
       now = now.plus({ minutes: DateTime.local().offset }).toJSDate();
-      document.getElementById('date').valueAsDate = now;
-      document.getElementById('time').valueAsDate = now;
+      document.getElementById("date").valueAsDate = now;
+      document.getElementById("time").valueAsDate = now;
       generate(DateTime.local());
 
       function fromSelected(gen) {
-        let date = document.getElementById('date').valueAsDate;
-        let time = document.getElementById('time').valueAsNumber;
+        let date = document.getElementById("date").valueAsDate;
+        let time = document.getElementById("time").valueAsNumber;
         time /= 1000; // convert from milliseconds to seconds
         let hours = Math.floor(time / 3600);
         let minutes = Math.floor((time % 3600) / 60);
         let seconds = Math.floor(time % 60);
         let dt = DateTime.fromObject({
-        	year: date.getFullYear(),
-        	month: date.getMonth() + 1, // Months are 1-based in Luxon
-        	day: date.getDate(),
-        	hour: hours,
-        	minute: minutes,
-        	second: seconds
+          year: date.getFullYear(),
+          month: date.getMonth() + 1, // Months are 1-based in Luxon
+          day: date.getDate(),
+          hour: hours,
+          minute: minutes,
+          second: seconds,
         });
         if (gen) generate(dt);
         else updateStyled(dt);
@@ -64,21 +75,39 @@
 
       function generate(dt) {
         const unixTime = dt.toUnixInteger();
-        document.getElementById('unix').innerHTML = Math.floor(unixTime);
-        document.getElementById('code').innerHTML = `&lt;t:${Math.floor(unixTime)}&gt;`;
-        document.getElementById('option1').innerHTML = dt.toLocaleString(DateTime.TIME_SIMPLE);
-        document.getElementById('option2').innerHTML = dt.toLocaleString(DateTime.TIME_WITH_SECONDS);
-        document.getElementById('option3').innerHTML = dt.toLocaleString(DateTime.DATE_SHORT);
-        document.getElementById('option4').innerHTML = dt.toLocaleString({...DateTime.DATE_MED, month: 'long' });
-        document.getElementById('option5').innerHTML = dt.toLocaleString({...DateTime.DATETIME_MED, month: 'long' });
-        document.getElementById('option6').innerHTML = dt.toLocaleString({...DateTime.DATETIME_FULL, weekday: 'long', timeZoneName: undefined });
-        document.getElementById('option7').innerHTML = dt.toRelative();
+        document.getElementById("unix").innerHTML = Math.floor(unixTime);
+        document.getElementById("code").innerHTML =
+          `&lt;t:${Math.floor(unixTime)}&gt;`;
+        document.getElementById("option1").innerHTML = dt.toLocaleString(
+          DateTime.TIME_SIMPLE,
+        );
+        document.getElementById("option2").innerHTML = dt.toLocaleString(
+          DateTime.TIME_WITH_SECONDS,
+        );
+        document.getElementById("option3").innerHTML = dt.toLocaleString(
+          DateTime.DATE_SHORT,
+        );
+        document.getElementById("option4").innerHTML = dt.toLocaleString({
+          ...DateTime.DATE_MED,
+          month: "long",
+        });
+        document.getElementById("option5").innerHTML = dt.toLocaleString({
+          ...DateTime.DATETIME_MED,
+          month: "long",
+        });
+        document.getElementById("option6").innerHTML = dt.toLocaleString({
+          ...DateTime.DATETIME_FULL,
+          weekday: "long",
+          timeZoneName: undefined,
+        });
+        document.getElementById("option7").innerHTML = dt.toRelative();
         updateStyled(dt);
       }
 
       function updateStyled(dt) {
         const unixTime = dt.toUnixInteger();
-        document.getElementById('styledCode').innerHTML = `&lt;t:${Math.floor(unixTime)}:${document.getElementById('style').value}&gt;`;
+        document.getElementById("styledCode").innerHTML =
+          `&lt;t:${Math.floor(unixTime)}:${document.getElementById("style").value}&gt;`;
       }
     </script>
   </body>
