@@ -46,50 +46,68 @@
     <script src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
     <script>
       // Initialize input elements with current date and time
-      moment.locale("nb");
-      let now = moment();
-      now.milliseconds(0);
-      now = now.add(moment().utcOffset(), "m").toDate();
+      const { DateTime, Settings } = luxon;
+      Settings.defaultLocale = "nb";
+      let now = DateTime.local().set({ millisecond: 0 });
+      now = now.plus({ minutes: DateTime.local().offset }).toJSDate();
       document.getElementById("date").valueAsDate = now;
       document.getElementById("time").valueAsDate = now;
-      generate(moment());
+      generate(DateTime.local());
 
       function fromSelected(gen) {
         let date = document.getElementById("date").valueAsDate;
         let time = document.getElementById("time").valueAsNumber;
         time /= 1000; // convert from milliseconds to seconds
-        let hours = time / 3600;
-        let minutes = (time % 3600) / 60;
-        let seconds = time % 60;
-        let mom = moment([
-          date.getFullYear(),
-          date.getMonth(),
-          date.getDate(),
-          hours,
-          minutes,
-          seconds,
-        ]);
-        if (gen) generate(mom);
-        else updateStyled(mom);
+        let hours = Math.floor(time / 3600);
+        let minutes = Math.floor((time % 3600) / 60);
+        let seconds = Math.floor(time % 60);
+        let dt = DateTime.fromObject({
+          year: date.getFullYear(),
+          month: date.getMonth() + 1, // Months are 1-based in Luxon
+          day: date.getDate(),
+          hour: hours,
+          minute: minutes,
+          second: seconds,
+        });
+        if (gen) generate(dt);
+        else updateStyled(dt);
       }
 
-      function generate(mom) {
-        document.getElementById("unix").innerHTML = mom.unix();
+      function generate(dt) {
+        const unixTime = dt.toUnixInteger();
+        document.getElementById("unix").innerHTML = Math.floor(unixTime);
         document.getElementById("code").innerHTML =
-          "&lt;t:" + mom.unix() + "&gt;";
-        document.getElementById("option1").innerHTML = mom.format("LT");
-        document.getElementById("option2").innerHTML = mom.format("LTS");
-        document.getElementById("option3").innerHTML = mom.format("L");
-        document.getElementById("option4").innerHTML = mom.format("LL");
-        document.getElementById("option5").innerHTML = mom.format("LLL");
-        document.getElementById("option6").innerHTML = mom.format("LLLL");
-        document.getElementById("option7").innerHTML = mom.fromNow();
-        updateStyled(mom);
+          `&lt;t:${Math.floor(unixTime)}&gt;`;
+        document.getElementById("option1").innerHTML = dt.toLocaleString(
+          DateTime.TIME_SIMPLE,
+        );
+        document.getElementById("option2").innerHTML = dt.toLocaleString(
+          DateTime.TIME_WITH_SECONDS,
+        );
+        document.getElementById("option3").innerHTML = dt.toLocaleString(
+          DateTime.DATE_SHORT,
+        );
+        document.getElementById("option4").innerHTML = dt.toLocaleString({
+          ...DateTime.DATE_MED,
+          month: "long",
+        });
+        document.getElementById("option5").innerHTML = dt.toLocaleString({
+          ...DateTime.DATETIME_MED,
+          month: "long",
+        });
+        document.getElementById("option6").innerHTML = dt.toLocaleString({
+          ...DateTime.DATETIME_FULL,
+          weekday: "long",
+          timeZoneName: undefined,
+        });
+        document.getElementById("option7").innerHTML = dt.toRelative();
+        updateStyled(dt);
       }
 
-      function updateStyled(mom) {
+      function updateStyled(dt) {
+        const unixTime = dt.toUnixInteger();
         document.getElementById("styledCode").innerHTML =
-          `&lt;t:${mom.unix()}:${document.getElementById("style").value}&gt;`;
+          `&lt;t:${Math.floor(unixTime)}:${document.getElementById("style").value}&gt;`;
       }
     </script>
   </body>
