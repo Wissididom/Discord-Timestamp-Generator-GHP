@@ -30,7 +30,9 @@
         <option id="option4" value="D"></option>
         <option id="option5" value="f" selected="selected"></option>
         <option id="option6" value="F"></option>
-        <option id="option7" value="R"></option>
+        <option id="option7" value="s"></option>
+        <option id="option8" value="S"></option>
+        <option id="option9" value="R"></option>
       </select>
     </div>
     <div class="grid-container">
@@ -100,7 +102,15 @@
           weekday: "long",
           timeZoneName: undefined,
         });
-        document.getElementById("option7").innerHTML = dt.toRelative();
+        document.getElementById("option7").innerHTML = dt.toLocaleString({
+          ...DateTime.DATETIME_SHORT,
+          second: undefined,
+        });
+        document.getElementById("option8").innerHTML = dt.toLocaleString({
+          ...DateTime.DATETIME_SHORT,
+          second: "2-digit",
+        });
+        document.getElementById("option9").innerHTML = dt.toRelative();
         updateStyled(dt);
       }
 
